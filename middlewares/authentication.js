@@ -19,7 +19,7 @@ const authentication = async (req, res, next) => {
         where: {
           id: decoded.id,
         },
-        attributes: ["id", "name", "email", "role"],
+        attributes: ["id", "username", "role"],
       });
 
       if (req.user == null) {
