@@ -120,7 +120,7 @@ class TripController {
       const trip = await Trip.findAndCountAll(options);
 
       res.status(200).json({
-        message: "Daftar nomor surat",
+        message: "Trip list",
         data: {
           trips: trip.rows,
           totalPages: Math.ceil(trip.count / Number(limit)),
@@ -201,6 +201,13 @@ class TripController {
 
       if (!trip) {
         throw new AppError("Trip not found", 404);
+      }
+
+      if (trip.reviewStatus) {
+        throw new AppError(
+          "Trip has already been reviewed and cannot be deleted",
+          409,
+        );
       }
 
       trip.destroy();

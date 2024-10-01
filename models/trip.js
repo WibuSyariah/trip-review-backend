@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.Car, { foreignKey: "carId" });
       this.belongsTo(models.Division, { foreignKey: "divisionId" });
       this.belongsTo(models.Emoney, { foreignKey: "emoneyId" });
+      this.hasOne(models.Review, { foreignKey: "tripId" });
     }
   }
   Trip.init(

@@ -6,10 +6,10 @@ const adminAuthorization = require("../middlewares/admin.authorization");
 
 router.use(authentication);
 router.get("/", TripController.readAll);
-router.get("/:id", TripController.readOne);
 router.post("/", TripController.create);
 
 router.use(adminAuthorization);
+router.get("/:id", TripController.readOne);
 router.patch("/:id", TripController.update);
 router.delete("/:id", TripController.delete);
 

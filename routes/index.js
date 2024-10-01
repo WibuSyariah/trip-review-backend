@@ -8,6 +8,7 @@ const driver = require("./driver.route");
 const car = require("./car.route");
 const emoney = require("./emoney.route");
 const trip = require("./trip.route");
+const review = require("./review.route");
 
 router.use("/auth", auth);
 router.use("/user", user);
@@ -16,5 +17,6 @@ router.use("/driver", driver);
 router.use("/car", car);
 router.use("/emoney", emoney);
 router.use("/trip", trip);
+router.use("/review", review);
 
 module.exports = router;
