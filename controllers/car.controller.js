@@ -13,7 +13,7 @@ class CarController {
       });
     } catch (error) {
       if (error.name === "SequelizeUniqueConstraintError") {
-        next(new AppError(`Car name is used`, 400));
+        next(new AppError(`Car name or plate number is used`, 400));
       }
       next(error);
     }
