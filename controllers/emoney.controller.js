@@ -1,19 +1,19 @@
-const { Emoney } = require("../models");
+const { EMoney } = require("../models");
 const AppError = require("../helpers/appError");
 
-class EmoneyController {
+class EMoneyController {
   static async create(req, res, next) {
     try {
-      await Emoney.create({
+      await EMoney.create({
         ...req.body,
       });
 
       res.status(201).json({
-        message: "Emoney created",
+        message: "EMoney created",
       });
     } catch (error) {
       if (error.name === "SequelizeUniqueConstraintError") {
-        next(new AppError(`Emoney name is used`, 400));
+        next(new AppError(`EMoney name is used`, 400));
       }
       next(error);
     }
@@ -31,13 +31,13 @@ class EmoneyController {
         order: [["id", "ASC"]],
       };
 
-      const emoneys = await Emoney.findAndCountAll(options);
+      const eMoneys = await EMoney.findAndCountAll(options);
 
       res.status(200).json({
-        message: "Emoney list",
+        message: "EMoney list",
         data: {
-          emoneys: emoneys.rows,
-          totalPages: Math.ceil(emoneys.count / Number(limit)),
+          eMoneys: eMoneys.rows,
+          totalPages: Math.ceil(eMoneys.count / Number(limit)),
           currentPage: Number(currentPage),
         },
       });
@@ -50,16 +50,16 @@ class EmoneyController {
     try {
       const { id } = req.params;
 
-      const emoney = await Emoney.findByPk(id);
+      const eMoney = await EMoney.findByPk(id);
 
-      if (!emoney) {
-        throw new AppError("Emoney not found", 404);
+      if (!eMoney) {
+        throw new AppError("EMoney not found", 404);
       }
 
-      emoney.destroy();
+      eMoney.destroy();
 
       res.status(200).json({
-        message: "Emoney deleted",
+        message: "EMoney deleted",
       });
     } catch (error) {
       next(error);
@@ -67,4 +67,4 @@ class EmoneyController {
   }
 }
 
-module.exports = EmoneyController;
+module.exports = EMoneyController;

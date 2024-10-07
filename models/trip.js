@@ -10,8 +10,9 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       this.belongsTo(models.Driver, { foreignKey: "driverId" });
       this.belongsTo(models.Car, { foreignKey: "carId" });
+      this.belongsTo(models.Company, { foreignKey: "companyId" });
       this.belongsTo(models.Division, { foreignKey: "divisionId" });
-      this.belongsTo(models.Emoney, { foreignKey: "emoneyId" });
+      this.belongsTo(models.EMoney, { foreignKey: "eMoneyId" });
       this.hasOne(models.Review, { foreignKey: "tripId" });
     }
   }
@@ -27,13 +28,25 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         type: DataTypes.STRING,
       },
+      destination: {
+        allowNull: false,
+        type: DataTypes.STRING,
+      },
       location: {
         allowNull: false,
         type: DataTypes.STRING,
       },
-      hour: {
+      purpose: {
         allowNull: false,
-        type: DataTypes.TIME,
+        type: DataTypes.STRING,
+      },
+      startDateTime: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+      endDateTime: {
+        allowNull: false,
+        type: DataTypes.DATE,
       },
       reviewStatus: {
         allowNull: false,
@@ -48,11 +61,15 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         type: DataTypes.INTEGER,
       },
+      companyId: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+      },
       divisionId: {
         allowNull: false,
         type: DataTypes.INTEGER,
       },
-      emoneyId: {
+      eMoneyId: {
         allowNull: false,
         type: DataTypes.INTEGER,
       },

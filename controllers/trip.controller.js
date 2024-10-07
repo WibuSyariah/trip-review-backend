@@ -1,4 +1,4 @@
-const { Trip, Driver, Car, Division, Emoney, sequelize } = require("../models");
+const { Trip, Driver, Car, Division, EMoney, sequelize } = require("../models");
 const { Op } = require("sequelize");
 const AppError = require("../helpers/appError");
 
@@ -6,14 +6,16 @@ class TripController {
   static async create(req, res, next) {
     const transaction = await sequelize.transaction();
     try {
+      console.log(req.body, "ini body coy");
+
       const {
         passenger,
         location,
-        hour,
+        date,
         driverId,
         carId,
         divisionId,
-        emoneyId,
+        eMoneyId,
       } = req.body;
 
       const driver = await Driver.findByPk(driverId);
@@ -31,19 +33,19 @@ class TripController {
         throw new AppError("Division not found", 404);
       }
 
-      const emoney = await Emoney.findByPk(emoneyId);
-      if (!emoney) {
-        throw new AppError("Emoney not found", 404);
+      const eMoney = await EMoney.findByPk(eMoneyId);
+      if (!eMoney) {
+        throw new AppError("EMoney not found", 404);
       }
 
       const trip = await Trip.create({
         passenger,
         location,
-        hour,
+        date,
         driverId,
         carId,
         divisionId,
-        emoneyId,
+        eMoneyId,
       });
 
       await transaction.commit();
@@ -65,7 +67,7 @@ class TripController {
         driverId,
         carId,
         divisionId,
-        emoneyId,
+        eMoneyId,
         startDate,
         endDate,
       } = req.query;
@@ -80,7 +82,7 @@ class TripController {
         driverId,
         carId,
         divisionId,
-        emoneyId,
+        eMoneyId,
       };
 
       // Remove undefined or null values from the where clause
@@ -111,7 +113,7 @@ class TripController {
             attributes: ["name"],
           },
           {
-            model: Emoney,
+            model: EMoney,
             attributes: ["name"],
           },
         ],
@@ -136,7 +138,14 @@ class TripController {
     try {
       const { id } = req.params;
 
-      const trip = await Trip.findByPk(id);
+      const trip = await Trip.findByPk(id, {
+        include: [
+          {
+            model: Driver,
+            attributes: ["name"],
+          },
+        ],
+      });
 
       if (!trip) {
         throw new AppError("Trip not found", 404);
@@ -164,7 +173,7 @@ class TripController {
         driverId,
         carId,
         divisionId,
-        emoneyId,
+        eMoneyId,
       } = req.body;
 
       let trip = await Trip.findByPk(id);
@@ -180,7 +189,7 @@ class TripController {
         driverId,
         carId,
         divisionId,
-        emoneyId,
+        eMoneyId,
       });
 
       await transaction.commit();

@@ -9,9 +9,13 @@ class TripController {
       const { tripId } = req.body;
 
       const trip = await Trip.findByPk(tripId);
-      
+
       if (!trip) {
         throw new AppError("Trip not found", 404);
+      }
+
+      if (trip.reviewStatus) {
+        throw new AppError("Trip already reviewed", 400);
       }
 
       const review = await Review.create(

@@ -13,13 +13,25 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING,
       },
+      destination: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
       location: {
         allowNull: false,
         type: Sequelize.STRING,
       },
-      hour: {
+      purpose: {
         allowNull: false,
-        type: Sequelize.TIME,
+        type: Sequelize.STRING,
+      },
+      startDateTime: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      endDateTime: {
+        allowNull: false,
+        type: Sequelize.DATE,
       },
       reviewStatus: {
         allowNull: false,
@@ -42,6 +54,14 @@ module.exports = {
           key: "id",
         },
       },
+      companyId: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: { tableName: "Companies" },
+          key: "id",
+        },
+      },
       divisionId: {
         allowNull: false,
         type: Sequelize.INTEGER,
@@ -50,11 +70,11 @@ module.exports = {
           key: "id",
         },
       },
-      emoneyId: {
+      eMoneyId: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: { tableName: "Emoneys" },
+          model: { tableName: "EMoneys" },
           key: "id",
         },
       },
