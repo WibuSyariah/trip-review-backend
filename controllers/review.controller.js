@@ -78,7 +78,7 @@ class TripController {
         include: [
           {
             model: Review,
-            attributes: ["star", "feedback"],
+            attributes: ["rating", "feedback"],
             required: true,
           },
           {

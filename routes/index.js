@@ -3,6 +3,7 @@ const router = express.Router();
 
 const auth = require("./auth.route");
 const user = require("./user.route");
+const company = require("./company.route");
 const division = require("./division.route");
 const driver = require("./driver.route");
 const car = require("./car.route");
@@ -13,6 +14,7 @@ const dropdown = require("./dropdown.route");
 
 router.use("/auth", auth);
 router.use("/user", user);
+router.use("/company", company);
 router.use("/division", division);
 router.use("/driver", driver);
 router.use("/car", car);

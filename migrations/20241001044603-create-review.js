@@ -9,7 +9,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      star: {
+      rating: {
         allowNull: false,
         type: Sequelize.INTEGER,
       },

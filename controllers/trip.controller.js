@@ -1,4 +1,13 @@
-const { Trip, Driver, Car, Division, EMoney, sequelize } = require("../models");
+const {
+  Trip,
+  Driver,
+  Car,
+  Company,
+  Division,
+  EMoney,
+  Review,
+  sequelize,
+} = require("../models");
 const { Op } = require("sequelize");
 const AppError = require("../helpers/appError");
 
@@ -6,14 +15,16 @@ class TripController {
   static async create(req, res, next) {
     const transaction = await sequelize.transaction();
     try {
-      console.log(req.body, "ini body coy");
-
       const {
         passenger,
+        destination,
         location,
-        date,
+        purpose,
+        startDateTime,
+        endDateTime,
         driverId,
         carId,
+        companyId,
         divisionId,
         eMoneyId,
       } = req.body;
@@ -28,6 +39,11 @@ class TripController {
         throw new AppError("Car not found", 404);
       }
 
+      const company = await Company.findByPk(companyId);
+      if (!company) {
+        throw new AppError("Company not found", 404);
+      }
+
       const division = await Division.findByPk(divisionId);
       if (!division) {
         throw new AppError("Division not found", 404);
@@ -40,10 +56,14 @@ class TripController {
 
       const trip = await Trip.create({
         passenger,
+        destination,
         location,
-        date,
+        purpose,
+        startDateTime,
+        endDateTime,
         driverId,
         carId,
+        companyId,
         divisionId,
         eMoneyId,
       });
@@ -66,31 +86,50 @@ class TripController {
         currentPage,
         driverId,
         carId,
+        companyId,
         divisionId,
         eMoneyId,
-        startDate,
-        endDate,
+        startDateTime,
+        endDateTime,
       } = req.query;
 
       const where = {
-        ...(startDate &&
-          endDate && {
-            createdAt: {
-              [Op.between]: [`${startDate} 00:00:00`, `${endDate} 23:59:59`],
-            },
-          }),
-        driverId,
-        carId,
-        divisionId,
-        eMoneyId,
+        ...(startDateTime && {
+          startDateTime: {
+            [Op.gte]: startDateTime,
+          },
+        }),
+        ...(endDateTime && {
+          endDateTime: {
+            [Op.lte]: endDateTime,
+          },
+        }),
+        ...(driverId
+          ? {
+              driverId,
+            }
+          : {}),
+        ...(carId
+          ? {
+              carId,
+            }
+          : {}),
+        ...(companyId
+          ? {
+              companyId,
+            }
+          : {}),
+        ...(divisionId
+          ? {
+              divisionId,
+            }
+          : {}),
+        ...(eMoneyId
+          ? {
+              eMoneyId,
+            }
+          : {}),
       };
-
-      // Remove undefined or null values from the where clause
-      Object.keys(where).forEach((key) => {
-        if (where[key] === undefined || where[key] === null) {
-          delete where[key];
-        }
-      });
 
       let options = {
         where,
@@ -109,6 +148,10 @@ class TripController {
             attributes: ["name", "plateNumber"],
           },
           {
+            model: Company,
+            attributes: ["name"],
+          },
+          {
             model: Division,
             attributes: ["name"],
           },
@@ -116,16 +159,20 @@ class TripController {
             model: EMoney,
             attributes: ["name"],
           },
+          {
+            model: Review,
+            attributes: ["rating", "feedback"]
+          }
         ],
       };
 
-      const trip = await Trip.findAndCountAll(options);
+      const trips = await Trip.findAndCountAll(options);
 
       res.status(200).json({
         message: "Trip list",
         data: {
-          trips: trip.rows,
-          totalPages: Math.ceil(trip.count / Number(limit)),
+          trips: trips.rows,
+          totalPages: Math.ceil(trips.count / Number(limit)),
           currentPage: Number(currentPage),
         },
       });
@@ -142,7 +189,7 @@ class TripController {
         include: [
           {
             model: Driver,
-            attributes: ["name"],
+            attributes: ["name", "image"],
           },
         ],
       });
