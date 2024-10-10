@@ -4,6 +4,7 @@ const TripController = require("../controllers/trip.controller");
 const authentication = require("../middlewares/authentication");
 const adminAuthorization = require("../middlewares/admin.authorization");
 
+router.get("/excel", authentication, TripController.generateExcel);
 router.get("/:id", TripController.readOne);
 
 router.use(authentication);
