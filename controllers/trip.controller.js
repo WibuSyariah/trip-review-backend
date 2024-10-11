@@ -222,7 +222,23 @@ class TripController {
         include: [
           {
             model: Driver,
-            attributes: ["name", "image"],
+            attributes: ["name"],
+          },
+          {
+            model: Car,
+            attributes: ["id", "name", "plateNumber"],
+          },
+          {
+            model: Company,
+            attributes: ["id", "name"],
+          },
+          {
+            model: Division,
+            attributes: ["id", "name"],
+          },
+          {
+            model: EMoney,
+            attributes: ["id", "name"],
           },
         ],
       });
@@ -248,10 +264,14 @@ class TripController {
       const { id } = req.params;
       const {
         passenger,
+        destination,
         location,
-        hour,
+        purpose,
+        startDateTime,
+        endDateTime,
         driverId,
         carId,
+        companyId,
         divisionId,
         eMoneyId,
       } = req.body;
@@ -264,10 +284,14 @@ class TripController {
 
       await trip.update({
         passenger,
+        destination,
         location,
-        hour,
+        purpose,
+        startDateTime,
+        endDateTime,
         driverId,
         carId,
+        companyId,
         divisionId,
         eMoneyId,
       });

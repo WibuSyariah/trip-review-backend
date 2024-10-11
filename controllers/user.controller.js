@@ -25,7 +25,7 @@ class UserController {
 
   static async readAll(req, res, next) {
     try {
-      const { limit, currentPage } = req.query;
+      const { username, limit, currentPage } = req.query;
 
       let condition = {
         limit: limit ? Number(limit) : 20,
@@ -36,6 +36,15 @@ class UserController {
           exclude: ["password"],
         },
         order: [["id", "ASC"]],
+        ...(username
+          ? {
+              where: {
+                username: {
+                  [Op.iLike]: `${username}%`,
+                },
+              },
+            }
+          : {}),
       };
 
       const users = await User.findAndCountAll(condition);
@@ -56,7 +65,7 @@ class UserController {
   static async update(req, res, next) {
     try {
       const { id } = req.params;
-      const { role, newPassword, confirmPassword } = req.body;
+      const { username, password } = req.body;
 
       const user = await User.findOne({
         where: { id },
@@ -68,16 +77,13 @@ class UserController {
       }
 
       let hashedPassword = "";
-      let updateData = {};
+      let updateData = {
+        username,
+      };
 
-      if (newPassword || confirmPassword) {
-        if (newPassword !== confirmPassword) {
-          throw new AppError("Passwords do not match", 400);
-        } else {
-          hashedPassword = hashPassword(newPassword);
-
-          updateData.password = hashedPassword;
-        }
+      if (password) {
+        hashedPassword = hashPassword(password);
+        updateData.password = hashedPassword;
       }
 
       await user.update(updateData);
