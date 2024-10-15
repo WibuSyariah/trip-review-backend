@@ -31,13 +31,13 @@ class CarController {
         order: [["id", "ASC"]],
       };
 
-      const car = await Car.findAndCountAll(options);
+      const cars = await Car.findAndCountAll(options);
 
       res.status(200).json({
         message: "Car list",
         data: {
-          car: car.rows,
-          totalPages: Math.ceil(car.count / Number(limit)),
+          cars: cars.rows,
+          totalPages: Math.ceil(cars.count / Number(limit)),
           currentPage: Number(currentPage),
         },
       });

@@ -6,6 +6,10 @@ const path = require("path");
 class DriverController {
   static async create(req, res, next) {
     try {
+      if (!req.file) {
+        throw new AppError("Please upload an image", 400);
+      }
+
       const { name } = req.body;
 
       const image = `${process.env.BASE_URL}/upload/image/${req.file.filename}`;
@@ -103,7 +107,7 @@ class DriverController {
 
       // Update the driver's information
       await driver.update({
-        name,
+        ...(name ? { name: name } : {}),
         image,
       });
 
