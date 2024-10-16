@@ -18,7 +18,7 @@ class AuthController {
         throw new AppError("Username or password is incorrect", 401);
       }
 
-      if (!(await comparePassword(password, user.password))) {
+      if (!comparePassword(password, user.password)) {
         throw new AppError("Username or password is incorrect", 401);
       }
 

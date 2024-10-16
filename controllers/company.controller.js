@@ -31,13 +31,13 @@ class CompanyController {
         order: [["id", "ASC"]],
       };
 
-      const divisions = await Company.findAndCountAll(options);
+      const companies = await Company.findAndCountAll(options);
 
       res.status(200).json({
         message: "Company list",
         data: {
-          divisions: divisions.rows,
-          totalPages: Math.ceil(divisions.count / Number(limit)),
+          companies: companies.rows,
+          totalPages: Math.ceil(companies.count / Number(limit)),
           currentPage: Number(currentPage),
         },
       });
