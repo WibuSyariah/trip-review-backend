@@ -5,9 +5,8 @@ const authentication = require("../middlewares/authentication");
 const adminAuthorization = require("../middlewares/admin.authorization");
 
 router.use(authentication)
-router.get("/", EMoneyController.readAll);
-
 router.use(adminAuthorization);
+router.get("/", EMoneyController.readAll);
 router.post("/", EMoneyController.create);
 router.delete("/:id", EMoneyController.delete);
 

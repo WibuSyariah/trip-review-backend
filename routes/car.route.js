@@ -5,9 +5,8 @@ const authentication = require("../middlewares/authentication");
 const adminAuthorization = require("../middlewares/admin.authorization");
 
 router.use(authentication);
-router.get("/", CarController.readAll);
-
 router.use(adminAuthorization);
+router.get("/", CarController.readAll);
 router.post("/", CarController.create);
 router.delete("/:id", CarController.delete);
 
